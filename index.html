@@ -259,12 +259,11 @@ async function claimOrder() {
       .replace(/>/g,'&gt;').replace(/"/g,'&quot;');
   }
   function linkify(text) {
-  // 將 http/https 開頭的網址轉成可點擊連結，開新分頁
-  return text.replace(
-    /(https?:\/\/[^\s<br>"]+)/g,
-    '<a href="$1" target="_blank" rel="noopener noreferrer" style="color:#5c6bc0;word-break:break-all;">$1</a>'
-  );
-}
+    return text.replace(
+      /(https?:\/\/[^\s<>"]+)/g,
+      '<a href="$1" target="_blank" rel="noopener noreferrer" style="color:#5c6bc0;word-break:break-all;overflow-wrap:anywhere;">$1</a>'
+    );
+  }
 </script>
 </body>
 </html>
