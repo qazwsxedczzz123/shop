@@ -165,7 +165,7 @@ async function claimOrder() {
     const r = document.getElementById('result');
 
     if (!data.success) {
-      const icon = data.isOutOfStock ? '📦' : data.isManual ? '🐱' : '❌';
+      const icon = data.isOutOfStock ? '📦' : data.isManual ? '🐱' : data.isBlacklisted ? '🚫' : '❌';
       const boxClass = data.isManual ? 'notice-card' : 'error-card';
       r.innerHTML = `
         <div class="card">
