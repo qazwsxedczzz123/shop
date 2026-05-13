@@ -205,12 +205,12 @@ async function claimOrder() {
     }
 
     const instrHTML = data.instructions ? `
-      <div class="instructions-box">
-        <div class="i-title">📋 使用說明</div>
-        <div class="i-body">${data.instructions
-          .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
-          .replace(/\r\n|\r|\n/g,'<br>')}</div>
-      </div>` : '';
+  <div class="instructions-box">
+    <div class="i-title">📋 使用說明</div>
+    <div class="i-body">${linkify(data.instructions
+      .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
+      .replace(/\r\n|\r|\n/g,'<br>'))}</div>
+  </div>` : '';
 
     const badge = data.alreadyClaimed ? '<span class="already-badge">✓ 已領取過</span>' : '';
 
@@ -258,6 +258,13 @@ async function claimOrder() {
       .replace(/&/g,'&amp;').replace(/</g,'&lt;')
       .replace(/>/g,'&gt;').replace(/"/g,'&quot;');
   }
+  function linkify(text) {
+  // 將 http/https 開頭的網址轉成可點擊連結，開新分頁
+  return text.replace(
+    /(https?:\/\/[^\s<br>"]+)/g,
+    '<a href="$1" target="_blank" rel="noopener noreferrer" style="color:#5c6bc0;word-break:break-all;">$1</a>'
+  );
+}
 </script>
 </body>
 </html>
