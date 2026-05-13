@@ -179,19 +179,25 @@ async function claimOrder() {
 
     let contentHTML = '';
     if (data.isEmailPass) {
-      const [email, password] = data.claimedContent;
-      contentHTML = `
-        <div class="section-title">帳號資訊</div>
-        <div class="item-row">
-          <span class="item-label">📧 信箱</span>
-          <span class="item-value" id="c0">${esc(email)}</span>
-          <button class="btn-copy" onclick="cp('c0',this)">複製</button>
-        </div>
-        <div class="item-row">
-          <span class="item-label">🔒 密碼</span>
-          <span class="item-value" id="c1">${esc(password)}</span>
-          <button class="btn-copy" onclick="cp('c1',this)">複製</button>
-        </div>`;
+  contentHTML = `<div class="section-title">帳號資訊</div>`;
+  const contents = data.claimedContent;
+  // 每兩個為一組（email, password）
+  for (let i = 0; i < contents.length; i += 2) {
+    const email    = contents[i]   || '';
+    const password = contents[i+1] || '';
+    const groupNum = contents.length > 2 ? ` ${i/2 + 1}` : ''; // 多組時顯示組別編號
+    contentHTML += `
+      <div class="item-row">
+        <span class="item-label">📧 信箱${groupNum}</span>
+        <span class="item-value" id="c${i}">${esc(email)}</span>
+        <button class="btn-copy" onclick="cp('c${i}',this)">複製</button>
+      </div>
+      <div class="item-row">
+        <span class="item-label">🔒 密碼${groupNum}</span>
+        <span class="item-value" id="c${i+1}">${esc(password)}</span>
+        <button class="btn-copy" onclick="cp('c${i+1}',this)">複製</button>
+      </div>`;
+  }
     } else {
       contentHTML = `<div class="section-title">序號</div>`;
       data.claimedContent.forEach((serial, i) => {
