@@ -220,7 +220,6 @@ async function claimOrder() {
           <div class="icon">${data.alreadyClaimed ? '📋' : '🎉'}</div>
           <h2>${data.alreadyClaimed ? '查詢成功' : '領取成功！'}</h2>
           ${badge}
-          <div class="sub">${esc(data.productName)}${data.option ? '・'+esc(data.option) : ''}</div>
         </div>
         <div class="product-info">
           <div class="name">${esc(data.productName)}</div>
