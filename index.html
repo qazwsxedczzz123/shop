@@ -240,9 +240,31 @@ async function claimOrder() {
 
   function showError() {
     document.getElementById('result').innerHTML = `
-      <div class="card"><div class="error-card">
-        <div class="icon">⚠️</div><p>系統發生錯誤，請稍後再試</p>
-      </div></div>`;
+      <div class="card">
+        <div class="error-card">
+          <div class="icon">⚠️</div>
+          <p>請更換為<strong>無痕模式</strong>，即可正常領取 🙏</p>
+          <p style="font-size:12px;color:#e57373;margin-top:8px;">
+            Chrome：右上角選單 → 開啟新的無痕式視窗<br>
+            Safari：分頁按鈕 → 私密
+          </p>
+          <div style="margin-top:14px;background:#fff0ee;border-radius:10px;padding:10px 14px;display:flex;align-items:center;gap:10px;">
+            <span style="font-size:12px;color:#888;flex:1;word-break:break-all;">https://neko.net.in/0</span>
+            <button onclick="copyUrl(this)" style="background:#ff6b35;color:white;border:none;border-radius:8px;padding:6px 14px;font-size:12px;cursor:pointer;white-space:nowrap;">複製網址</button>
+          </div>
+        </div>
+      </div>`;
+  }
+
+  function copyUrl(btn) {
+    navigator.clipboard.writeText('https://neko.net.in/0').then(() => {
+      btn.textContent = '已複製 ✓';
+      btn.style.background = '#4caf50';
+      setTimeout(() => {
+        btn.textContent = '複製網址';
+        btn.style.background = '#ff6b35';
+      }, 2000);
+    });
   }
 
   function cp(id, btn) {
