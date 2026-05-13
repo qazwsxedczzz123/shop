@@ -116,8 +116,8 @@
   // ⚠️ 請換成您自己的 Apps Script Web App 網址
   const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwKSptYkIiBvv7wO0vkhjj-Zb0sra1Xdj718KnbZuXBZnFYmt6TT3oB_lMKHdFzjHCU/exec';
 
-function claimOrder() {
-  const orderId = document.getElementById('orderId').value.trim();
+async function claimOrder() {
+  const orderId = document.getElementById('orderId').value.trim().replace(/^#/, '');
   if (!orderId) { alert('請輸入訂單編號'); return; }
 
   const btn = document.getElementById('claimBtn');
@@ -128,11 +128,20 @@ function claimOrder() {
   r.style.display = 'block';
   r.innerHTML = `<div class="card"><div class="loading"><div class="spinner"></div>處理中，請稍候...</div></div>`;
 
+  // 取得買家 IP
+  let buyerIP = '';
+  try {
+    const ipRes = await fetch('https://api.ipify.org?format=json');
+    const ipData = await ipRes.json();
+    buyerIP = ipData.ip || '';
+  } catch(e) {
+    buyerIP = '無法取得';
+  }
+
   // 清除上一次的 JSONP script tag
   const old = document.getElementById('jsonp-script');
   if (old) old.remove();
 
-  // 設定 callback 函式
   window._jsonpCallback = function(data) {
     document.getElementById('jsonp-script').remove();
     document.getElementById('claimBtn').disabled = false;
@@ -140,10 +149,9 @@ function claimOrder() {
     showResult(data);
   };
 
-  // 建立 script tag 發送請求
   const script = document.createElement('script');
   script.id = 'jsonp-script';
-  script.src = `${APPS_SCRIPT_URL}?action=getOrderInfo&orderId=${encodeURIComponent(orderId)}&callback=_jsonpCallback`;
+  script.src = `${APPS_SCRIPT_URL}?action=getOrderInfo&orderId=${encodeURIComponent(orderId)}&ip=${encodeURIComponent(buyerIP)}&callback=_jsonpCallback`;
   script.onerror = function() {
     document.getElementById('claimBtn').disabled = false;
     document.getElementById('claimBtn').textContent = '領取商品';
